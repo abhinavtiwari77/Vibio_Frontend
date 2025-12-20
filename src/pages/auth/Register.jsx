@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Eye, EyeOff, Mail, Lock, User, Phone, Heart, Activity, Stethoscope } from 'lucide-react';
+import { Eye, EyeOff, Mail, User, Phone, Heart, ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -28,293 +29,236 @@ const Register = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (formData.name.length < 2) {
       newErrors.name = 'Name must be at least 2 characters';
     }
-    
+
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Invalid email address';
     }
-    
+
     if (formData.password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters';
     }
-    
+
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
-    
+
     setLoading(true);
     const { confirmPassword, ...registerData } = formData;
     const result = await register(registerData);
     setLoading(false);
-    
+
     if (result.success) {
       navigate('/');
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-400 via-cyan-500 to-teal-600 flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Floating DNA Icon */}
-        <div className="absolute top-20 left-20 animate-float">
-          <div className="w-32 h-32 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
-            <Activity className="w-16 h-16 text-white/40" strokeWidth={1.5} />
+    <div className="min-h-screen bg-white flex items-center justify-center p-4">
+      {/* Main Content - No Card Container */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.98 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md my-8"
+      >
+        <div className="p-4 sm:p-0">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <motion.div
+              className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-tr from-indigo-500 to-violet-500 shadow-lg mb-5 group transform transition-transform hover:scale-110"
+              whileHover={{ rotate: 5 }}
+            >
+              <Heart className="w-7 h-7 text-white fill-current" />
+            </motion.div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Create Account</h2>
+            <p className="text-gray-500 text-sm">Join HealWell community today</p>
           </div>
-        </div>
-
-        {/* Floating Heart Icon */}
-        <div className="absolute bottom-32 right-32 animate-float-delayed">
-          <div className="w-40 h-40 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
-            <Heart className="w-20 h-20 text-white/40" strokeWidth={1.5} />
-          </div>
-        </div>
-
-        {/* Floating Stethoscope */}
-        <div className="absolute top-1/2 right-20 animate-float">
-          <div className="w-36 h-36 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
-            <Stethoscope className="w-18 h-18 text-white/40" strokeWidth={1.5} />
-          </div>
-        </div>
-
-        {/* EKG Line */}
-        <svg className="absolute bottom-0 left-0 w-full h-24 text-white/20" viewBox="0 0 1200 100" preserveAspectRatio="none">
-          <path d="M0,50 L200,50 L220,30 L240,70 L260,50 L1200,50" stroke="currentColor" strokeWidth="2" fill="none" />
-        </svg>
-      </div>
-
-      {/* Register Card */}
-      <div className="relative w-full max-w-md animate-fade-in">
-        {/* Logo/Icon at top */}
-        <div className="flex justify-center mb-6 animate-bounce-slow">
-          <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center shadow-lg">
-            <div className="text-white text-3xl font-bold">+</div>
-          </div>
-        </div>
-
-        {/* Main Card */}
-        <div className="bg-white rounded-3xl shadow-2xl p-8 backdrop-blur-sm">
-          {/* Logo Icon inside card */}
-          <div className="flex justify-center -mt-16 mb-6">
-            <div className="w-16 h-16 bg-teal-500 rounded-2xl flex items-center justify-center shadow-lg rotate-45">
-              <div className="text-white text-2xl font-bold -rotate-45">+</div>
-            </div>
-          </div>
-
-          <h2 className="text-3xl font-bold text-gray-700 text-center mb-2">Create Account</h2>
-          <p className="text-gray-500 text-center mb-8 text-sm">Join HealWell community today</p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Name Field */}
-            <div>
-              <label className="block text-sm font-medium text-gray-600 mb-2">
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-gray-700 ml-1">
                 Full Name
               </label>
-              <div className="relative">
+              <div className="relative group">
                 <input
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="John Doe"
-                  className="w-full px-4 py-3 pr-10 border-b-2 border-gray-300 focus:border-teal-500 outline-none transition-colors bg-transparent text-gray-700"
+                  className={`w-full px-5 py-3 bg-gray-50 border rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all duration-200 ${errors.name ? 'border-red-500 focus:border-red-500' : 'border-gray-200 focus:border-indigo-500'
+                    }`}
                   required
                 />
-                <User className="absolute right-2 top-3 w-5 h-5 text-gray-400" />
+                <User className="absolute right-4 top-3.5 w-5 h-5 text-gray-400 group-focus-within:text-indigo-500 transition-colors" />
               </div>
-              {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+              {errors.name && <p className="text-red-500 text-xs ml-1 mt-1">{errors.name}</p>}
             </div>
 
             {/* Email Field */}
-            <div>
-              <label className="block text-sm font-medium text-gray-600 mb-2">
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-gray-700 ml-1">
                 Email Address
               </label>
-              <div className="relative">
+              <div className="relative group">
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="john@example.com"
-                  className="w-full px-4 py-3 pr-10 border-b-2 border-gray-300 focus:border-teal-500 outline-none transition-colors bg-transparent text-gray-700"
+                  className={`w-full px-5 py-3 bg-gray-50 border rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all duration-200 ${errors.email ? 'border-red-500 focus:border-red-500' : 'border-gray-200 focus:border-indigo-500'
+                    }`}
                   required
                 />
-                <Mail className="absolute right-2 top-3 w-5 h-5 text-gray-400" />
+                <Mail className="absolute right-4 top-3.5 w-5 h-5 text-gray-400 group-focus-within:text-indigo-500 transition-colors" />
               </div>
-              {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+              {errors.email && <p className="text-red-500 text-xs ml-1 mt-1">{errors.email}</p>}
             </div>
 
             {/* Phone Field (Optional) */}
-            <div>
-              <label className="block text-sm font-medium text-gray-600 mb-2">
-                Phone Number <span className="text-gray-400 text-xs">(Optional)</span>
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-gray-700 ml-1">
+                Phone Number <span className="text-gray-400 font-normal text-xs">(Optional)</span>
               </label>
-              <div className="relative">
+              <div className="relative group">
                 <input
                   type="tel"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="+1234567890"
-                  className="w-full px-4 py-3 pr-10 border-b-2 border-gray-300 focus:border-teal-500 outline-none transition-colors bg-transparent text-gray-700"
+                  className="w-full px-5 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all duration-200"
                 />
-                <Phone className="absolute right-2 top-3 w-5 h-5 text-gray-400" />
+                <Phone className="absolute right-4 top-3.5 w-5 h-5 text-gray-400 group-focus-within:text-indigo-500 transition-colors" />
               </div>
             </div>
 
             {/* Password Field */}
-            <div>
-              <label className="block text-sm font-medium text-gray-600 mb-2">
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-gray-700 ml-1">
                 Password
               </label>
-              <div className="relative">
+              <div className="relative group">
                 <input
                   type={showPassword ? 'text' : 'password'}
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="••••••••"
-                  className="w-full px-4 py-3 pr-10 border-b-2 border-gray-300 focus:border-teal-500 outline-none transition-colors bg-transparent text-gray-700"
+                  className={`w-full px-5 py-3 bg-gray-50 border rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all duration-200 ${errors.password ? 'border-red-500 focus:border-red-500' : 'border-gray-200 focus:border-indigo-500'
+                    }`}
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-2 top-3 text-gray-400 hover:text-gray-600"
+                  className="absolute right-4 top-3.5 text-gray-400 hover:text-gray-600 transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
-              {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
+              {errors.password && <p className="text-red-500 text-xs ml-1 mt-1">{errors.password}</p>}
             </div>
 
             {/* Confirm Password Field */}
-            <div>
-              <label className="block text-sm font-medium text-gray-600 mb-2">
+            <div className="space-y-1">
+              <label className="text-sm font-medium text-gray-700 ml-1">
                 Confirm Password
               </label>
-              <div className="relative">
+              <div className="relative group">
                 <input
                   type={showConfirmPassword ? 'text' : 'password'}
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   placeholder="••••••••"
-                  className="w-full px-4 py-3 pr-10 border-b-2 border-gray-300 focus:border-teal-500 outline-none transition-colors bg-transparent text-gray-700"
+                  className={`w-full px-5 py-3 bg-gray-50 border rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all duration-200 ${errors.confirmPassword ? 'border-red-500 focus:border-red-500' : 'border-gray-200 focus:border-indigo-500'
+                    }`}
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-2 top-3 text-gray-400 hover:text-gray-600"
+                  className="absolute right-4 top-3.5 text-gray-400 hover:text-gray-600 transition-colors"
                 >
                   {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
-              {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
+              {errors.confirmPassword && <p className="text-red-500 text-xs ml-1 mt-1">{errors.confirmPassword}</p>}
             </div>
 
             {/* Sign Up Button */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 rounded-xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg mt-6"
+              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3.5 rounded-xl transition-all duration-200 transform hover:translate-y-[-1px] active:translate-y-[1px] shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-2"
             >
-              {loading ? 'Creating Account...' : 'SIGN UP'}
+              {loading ? (
+                'Creating Account...'
+              ) : (
+                <>
+                  Create Account
+                  <ArrowRight className="w-5 h-5" />
+                </>
+              )}
             </button>
 
             {/* Divider */}
-            <div className="flex items-center my-6">
-              <div className="flex-1 border-t border-gray-300"></div>
-              <span className="px-4 text-gray-500 text-sm">OR</span>
-              <div className="flex-1 border-t border-gray-300"></div>
+            <div className="relative flex items-center py-2">
+              <div className="flex-grow border-t border-gray-100"></div>
+              <span className="flex-shrink-0 mx-4 text-gray-400 text-xs font-medium uppercase tracking-wider">OR</span>
+              <div className="flex-grow border-t border-gray-100"></div>
             </div>
 
-            {/* Google Sign Up */}
-            <button
-              type="button"
-              className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-medium py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 hover:shadow-md"
-            >
-              <svg className="w-5 h-5" viewBox="0 0 24 24">
-                <path
-                  fill="#4285F4"
-                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                />
-                <path
-                  fill="#34A853"
-                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                />
-                <path
-                  fill="#FBBC05"
-                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                />
-                <path
-                  fill="#EA4335"
-                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                />
-              </svg>
-              Continue with Google
-            </button>
+            <div className="text-center mb-2">
+              <p className="text-gray-500 text-sm">
+                Already have an account?{' '}
+                <Link to="/login" className="font-semibold text-indigo-600 hover:text-indigo-500 hover:underline transition-all">
+                  Sign In
+                </Link>
+              </p>
+            </div>
           </form>
-
-          {/* Sign In Link */}
-          <p className="text-center mt-8 text-gray-600">
-            Already have an account?{' '}
-            <Link to="/login" className="text-teal-500 hover:text-teal-600 font-semibold">
-              Sign In
-            </Link>
-          </p>
         </div>
+      </motion.div>
+
+      {/* Decorative Background Bubbles */}
+      <div className="fixed top-0 left-0 w-full h-full pointer-events-none -z-10 overflow-hidden">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-200/30 rounded-full blur-3xl opacity-50 animate-blob"></div>
+        <div className="absolute top-[20%] right-[-10%] w-[35%] h-[35%] bg-violet-200/30 rounded-full blur-3xl opacity-50 animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-[-10%] left-[20%] w-[45%] h-[45%] bg-purple-200/30 rounded-full blur-3xl opacity-50 animate-blob animation-delay-4000"></div>
       </div>
 
       <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
+        @keyframes blob {
+          0% { transform: translate(0px, 0px) scale(1); }
+          33% { transform: translate(30px, -50px) scale(1.1); }
+          66% { transform: translate(-20px, 20px) scale(0.9); }
+          100% { transform: translate(0px, 0px) scale(1); }
         }
-        
-        @keyframes float-delayed {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-30px); }
+        .animate-blob {
+          animation: blob 7s infinite;
         }
-        
-        @keyframes fade-in {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
+        .animation-delay-2000 {
+          animation-delay: 2s;
         }
-        
-        @keyframes bounce-slow {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
-        }
-        
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-        
-        .animate-float-delayed {
-          animation: float-delayed 8s ease-in-out infinite;
-        }
-        
-        .animate-fade-in {
-          animation: fade-in 0.6s ease-out;
-        }
-        
-        .animate-bounce-slow {
-          animation: bounce-slow 3s ease-in-out infinite;
+        .animation-delay-4000 {
+          animation-delay: 4s;
         }
       `}</style>
     </div>

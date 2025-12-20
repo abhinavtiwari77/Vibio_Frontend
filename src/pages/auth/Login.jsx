@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Eye, EyeOff, Mail, Lock, Heart, Activity, Stethoscope } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, Heart, ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -22,202 +23,148 @@ const Login = () => {
     setLoading(true);
     const result = await login(formData.email, formData.password);
     setLoading(false);
-    
+
     if (result.success) {
       navigate('/');
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-400 via-cyan-500 to-teal-600 flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Floating DNA Icon */}
-        <div className="absolute top-20 left-20 animate-float">
-          <div className="w-32 h-32 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
-            <Activity className="w-16 h-16 text-white/40" strokeWidth={1.5} />
+    <div className="min-h-screen bg-white flex items-center justify-center p-4">
+      {/* Main Content - No Card Container */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md"
+      >
+        <div className="p-4 sm:p-0">
+          {/* Header */}
+          <div className="text-center mb-10">
+            <motion.div
+              className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-gradient-to-tr from-indigo-500 to-violet-500 shadow-lg mb-6 group transform transition-transform hover:scale-110"
+              whileHover={{ rotate: 5 }}
+            >
+              <Heart className="w-8 h-8 text-white fill-current" />
+            </motion.div>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back!</h2>
+            <p className="text-gray-500">Let's Connect, Together.</p>
           </div>
-        </div>
-
-        {/* Floating Heart Icon */}
-        <div className="absolute bottom-32 right-32 animate-float-delayed">
-          <div className="w-40 h-40 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
-            <Heart className="w-20 h-20 text-white/40" strokeWidth={1.5} />
-          </div>
-        </div>
-
-        {/* Floating Stethoscope */}
-        <div className="absolute top-1/2 right-20 animate-float">
-          <div className="w-36 h-36 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
-            <Stethoscope className="w-18 h-18 text-white/40" strokeWidth={1.5} />
-          </div>
-        </div>
-
-        {/* EKG Line */}
-        <svg className="absolute bottom-0 left-0 w-full h-24 text-white/20" viewBox="0 0 1200 100" preserveAspectRatio="none">
-          <path d="M0,50 L200,50 L220,30 L240,70 L260,50 L1200,50" stroke="currentColor" strokeWidth="2" fill="none" />
-        </svg>
-      </div>
-
-      {/* Login Card */}
-      <div className="relative w-full max-w-md animate-fade-in">
-        {/* Logo/Icon at top */}
-        <div className="flex justify-center mb-6 animate-bounce-slow">
-          <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center shadow-lg">
-            <div className="text-white text-3xl font-bold">+</div>
-          </div>
-        </div>
-
-        {/* Main Card */}
-        <div className="bg-white rounded-3xl shadow-2xl p-8 backdrop-blur-sm">
-          {/* Logo Icon inside card */}
-          <div className="flex justify-center -mt-16 mb-6">
-            <div className="w-16 h-16 bg-teal-500 rounded-2xl flex items-center justify-center shadow-lg rotate-45">
-              <div className="text-white text-2xl font-bold -rotate-45">+</div>
-            </div>
-          </div>
-
-          <h2 className="text-3xl font-bold text-gray-700 text-center mb-2">Welcome Back!</h2>
-          <p className="text-gray-500 text-center mb-8 text-sm">Sign in to continue your wellness journey</p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email Field */}
-            <div>
-              <label className="block text-sm font-medium text-gray-600 mb-2">
-                Email or No. Handphone
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700 ml-1">
+                Username or Email
               </label>
-              <div className="relative">
+              <div className="relative group">
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="suardi@gmail.co.id"
-                  className="w-full px-4 py-3 pr-10 border-b-2 border-gray-300 focus:border-teal-500 outline-none transition-colors bg-transparent text-gray-700"
+                  placeholder="Enter your email"
+                  className="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all duration-200"
                   required
                 />
-                <Mail className="absolute right-2 top-3 w-5 h-5 text-gray-400" />
+                <Mail className="absolute right-4 top-3.5 w-5 h-5 text-gray-400 group-focus-within:text-indigo-500 transition-colors" />
               </div>
+              <p className="text-xs text-gray-400 ml-1">
+                Enter your username or email (not case-sensitive).
+              </p>
             </div>
 
             {/* Password Field */}
-            <div>
-              <label className="block text-sm font-medium text-gray-600 mb-2">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700 ml-1">
                 Password
               </label>
-              <div className="relative">
+              <div className="relative group">
                 <input
                   type={showPassword ? 'text' : 'password'}
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  placeholder="••••••••"
-                  className="w-full px-4 py-3 pr-10 border-b-2 border-gray-300 focus:border-teal-500 outline-none transition-colors bg-transparent text-gray-700"
+                  placeholder="Enter your password"
+                  className="w-full px-5 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all duration-200"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-2 top-3 text-gray-400 hover:text-gray-600"
+                  className="absolute right-4 top-3.5 text-gray-400 hover:text-gray-600 transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
-              <div className="flex justify-end mt-2">
-                <Link to="/forgot-password" className="text-sm text-teal-500 hover:text-teal-600">
-                  Forgot Password?
-                </Link>
-              </div>
+              <p className="text-xs text-gray-400 ml-1">
+                Enter your account password.
+              </p>
+            </div>
+
+            <div className="flex justify-end pt-1">
+              <Link to="/forgot-password" className="text-sm font-medium text-indigo-600 hover:text-indigo-500 hover:underline transition-all">
+                Forgot password?
+              </Link>
             </div>
 
             {/* Sign In Button */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 rounded-xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3.5 rounded-xl transition-all duration-200 transform hover:translate-y-[-1px] active:translate-y-[1px] shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              {loading ? 'Signing In...' : 'SIGN IN'}
+              {loading ? (
+                'Signing In...'
+              ) : (
+                <>
+                  Sign In
+                  <ArrowRight className="w-5 h-5" />
+                </>
+              )}
             </button>
 
             {/* Divider */}
-            <div className="flex items-center my-6">
-              <div className="flex-1 border-t border-gray-300"></div>
-              <span className="px-4 text-gray-500 text-sm">OR</span>
-              <div className="flex-1 border-t border-gray-300"></div>
+            <div className="relative flex items-center py-2">
+              <div className="flex-grow border-t border-gray-100"></div>
+              <span className="flex-shrink-0 mx-4 text-gray-400 text-xs font-medium uppercase tracking-wider">OR</span>
+              <div className="flex-grow border-t border-gray-100"></div>
             </div>
 
-            {/* Google Sign In */}
-            <button
-              type="button"
-              className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-medium py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 hover:shadow-md"
-            >
-              <svg className="w-5 h-5" viewBox="0 0 24 24">
-                <path
-                  fill="#4285F4"
-                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                />
-                <path
-                  fill="#34A853"
-                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                />
-                <path
-                  fill="#FBBC05"
-                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                />
-                <path
-                  fill="#EA4335"
-                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                />
-              </svg>
-              Continue with Google
-            </button>
+            <div className="text-center">
+              <p className="text-gray-500 text-sm">
+                Don't have an account?{' '}
+                <Link to="/register" className="font-semibold text-indigo-600 hover:text-indigo-500 hover:underline transition-all">
+                  Sign up
+                </Link>
+              </p>
+            </div>
           </form>
-
-          {/* Sign Up Link */}
-          <p className="text-center mt-8 text-gray-600">
-            Don't have an account?{' '}
-            <Link to="/register" className="text-teal-500 hover:text-teal-600 font-semibold">
-              Sign Up
-            </Link>
-          </p>
         </div>
+      </motion.div>
+
+      {/* Decorative Background Bubbles */}
+      <div className="fixed top-0 left-0 w-full h-full pointer-events-none -z-10 overflow-hidden">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-200/30 rounded-full blur-3xl opacity-50 animate-blob"></div>
+        <div className="absolute top-[20%] right-[-10%] w-[35%] h-[35%] bg-violet-200/30 rounded-full blur-3xl opacity-50 animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-[-10%] left-[20%] w-[45%] h-[45%] bg-purple-200/30 rounded-full blur-3xl opacity-50 animate-blob animation-delay-4000"></div>
       </div>
 
       <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
+        @keyframes blob {
+          0% { transform: translate(0px, 0px) scale(1); }
+          33% { transform: translate(30px, -50px) scale(1.1); }
+          66% { transform: translate(-20px, 20px) scale(0.9); }
+          100% { transform: translate(0px, 0px) scale(1); }
         }
-        
-        @keyframes float-delayed {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-30px); }
+        .animate-blob {
+          animation: blob 7s infinite;
         }
-        
-        @keyframes fade-in {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
+        .animation-delay-2000 {
+          animation-delay: 2s;
         }
-        
-        @keyframes bounce-slow {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
-        }
-        
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-        
-        .animate-float-delayed {
-          animation: float-delayed 8s ease-in-out infinite;
-        }
-        
-        .animate-fade-in {
-          animation: fade-in 0.6s ease-out;
-        }
-        
-        .animate-bounce-slow {
-          animation: bounce-slow 3s ease-in-out infinite;
+        .animation-delay-4000 {
+          animation-delay: 4s;
         }
       `}</style>
     </div>
