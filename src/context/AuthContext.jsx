@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
       try {
         const response = await api.get('/auth/me');
         setUser(response.data.user);
-        initSocket(token);
+        initSocket(token, response.data.user?._id);
       } catch (error) {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(userData));
       setUser(userData);
-      initSocket(token);
+      initSocket(token, userData?._id);
       toast.success('Welcome back!');
       return { success: true };
     } catch (error) {
@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(newUser));
       setUser(newUser);
-      initSocket(token);
+      initSocket(token, newUser?._id);
       toast.success('Account created successfully!');
       return { success: true };
     } catch (error) {

@@ -37,6 +37,10 @@ const NotificationManager = () => {
             shouldNotify = true;
             title = 'New Comment';
             body = `${notif.sender?.name} commented on your post`;
+        } else if (notif.type === 'follow_request' && followsEnabled) {
+            shouldNotify = true;
+            title = 'New Follow Request';
+            body = `${notif.sender?.name} sent you a follow request`;
         } else if (notif.type === 'follow' && followsEnabled) {
             shouldNotify = true;
             title = 'New Follower';

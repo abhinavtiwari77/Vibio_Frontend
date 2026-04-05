@@ -34,6 +34,18 @@ const Messages = () => {
     }
   }, [activeConversation]);
 
+  useEffect(() => {
+    const socket = getSocket();
+    const roomId = activeConversation?._id;
+    if (!socket || !roomId) return;
+
+    socket.emit('joinConversation', roomId);
+
+    return () => {
+      socket.emit('leaveConversation', roomId);
+    };
+  }, [activeConversation?._id]);
+
   const [onlineUserIds, setOnlineUserIds] = useState([]);
 
   useEffect(() => {
@@ -44,13 +56,20 @@ const Messages = () => {
       const socket = initSocket(localStorage.getItem('token'), user._id);
 
       const handleOnlineUsers = (users) => {
-        setOnlineUserIds(users);
+        setOnlineUserIds((users || []).map((id) => String(id)));
+      };
+
+      const handleReconnect = () => {
+        socket.emit('requestOnlineUsers');
       };
 
       socket.on('getOnlineUsers', handleOnlineUsers);
+      socket.on('connect', handleReconnect);
+      socket.emit('requestOnlineUsers');
 
       return () => {
         socket.off('getOnlineUsers', handleOnlineUsers);
+        socket.off('connect', handleReconnect);
       };
     }
   }, [user]);
@@ -65,7 +84,10 @@ const Messages = () => {
 
       // Update messages if looking at this conversation
       if (activeConversation?._id === conversationId) {
-        setMessages((prev) => [...prev, message]);
+        setMessages((prev) => {
+          if (prev.some((m) => String(m._id) === String(message?._id))) return prev;
+          return [...prev, message];
+        });
         messageService.markAsRead(conversationId);
       }
 
@@ -137,7 +159,10 @@ const Messages = () => {
       const data = await messageService.sendMessage(convId, content);
       const newMsg = data.message;
 
-      setMessages(prev => [...prev, newMsg]);
+      setMessages(prev => {
+        if (prev.some((m) => String(m._id) === String(newMsg?._id))) return prev;
+        return [...prev, newMsg];
+      });
 
       // Update list last message
       setConversations((prev) => {
@@ -190,7 +215,7 @@ const Messages = () => {
 
   return (
     <MainLayout showRightSidebar={false} wide>
-      <div className="flex h-[calc(100vh-7.5rem)] min-h-[620px] w-full bg-white/95 shadow-[0_14px_40px_rgba(15,23,42,0.08)] overflow-hidden rounded-2xl border border-blue-100">
+      <div className="flex h-[calc(100vh-5.5rem)] min-h-[620px] w-full min-w-0 bg-white/95 shadow-[0_14px_40px_rgba(15,23,42,0.08)] overflow-hidden border-y border-blue-100 lg:border lg:rounded-l-2xl">
 
         {/* Left Sidebar: Conversations & Search */}
         <div className={`w-full md:w-[350px] lg:w-[390px] xl:w-[420px] flex flex-col border-r border-blue-100 bg-white ${showMobileList ? 'flex' : 'hidden md:flex'

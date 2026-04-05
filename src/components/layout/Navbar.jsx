@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { communityService, userService, notificationService } from '../../services';
@@ -20,6 +20,7 @@ import {
   BookOpen,
   Disc3
 } from 'lucide-react';
+import { getSocket } from '../../utils/socket';
 import { useClickOutside } from '../../hooks';
 
 const Navbar = () => {
@@ -48,18 +49,52 @@ const Navbar = () => {
   const profileMenuRef = useClickOutside(() => setShowProfileMenu(false));
 
 
+  const fetchRequests = useCallback(async () => {
+    try {
+      const [userData, comData, notifData] = await Promise.all([
+        userService.getFollowRequests(),
+        communityService.getPendingRequests(),
+        notificationService.getNotifications()
+      ]);
+      setRequests(userData.requests);
+      setCommunityRequests(comData.communities);
+      setUnreadCount(notifData.unreadCount || 0);
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+
   useEffect(() => {
     if (user) {
       fetchRequests();
     }
-  }, [user]);
+  }, [user, fetchRequests]);
 
-  // Poll for notifications
+  // Poll fallback for notifications
   useEffect(() => {
     if (!user) return;
     const interval = setInterval(fetchRequests, 30000);
     return () => clearInterval(interval);
-  }, [user]);
+  }, [user, fetchRequests]);
+
+  // Realtime update for badges
+  useEffect(() => {
+    if (!user) return;
+    const socket = getSocket();
+    if (!socket) return;
+
+    const handleRealtime = () => {
+      fetchRequests();
+    };
+
+    socket.on('newNotification', handleRealtime);
+    socket.on('followRequestUpdated', handleRealtime);
+
+    return () => {
+      socket.off('newNotification', handleRealtime);
+      socket.off('followRequestUpdated', handleRealtime);
+    };
+  }, [user, fetchRequests]);
 
   // Debounced search
   useEffect(() => {
@@ -81,21 +116,6 @@ const Navbar = () => {
 
     return () => clearTimeout(delayDebounceFn);
   }, [searchQuery]);
-
-  const fetchRequests = async () => {
-    try {
-      const [userData, comData, notifData] = await Promise.all([
-        userService.getFollowRequests(),
-        communityService.getPendingRequests(),
-        notificationService.getNotifications()
-      ]);
-      setRequests(userData.requests);
-      setCommunityRequests(comData.communities);
-      setUnreadCount(notifData.unreadCount || 0);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const handleLogout = () => {
     logout();

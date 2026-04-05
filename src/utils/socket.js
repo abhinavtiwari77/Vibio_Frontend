@@ -5,13 +5,25 @@ const SOCKET_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://
 let socket = null;
 
 export const initSocket = (token, userId) => {
-  if (!socket) {
-    socket = io(SOCKET_URL, {
-      auth: { token },
-      query: { userId },
-      transports: ['websocket', 'polling'],
-    });
+  const normalizedUserId = userId ? String(userId) : undefined;
+
+  if (socket) {
+    const currentUserId = String(socket.io?.opts?.query?.userId || '');
+    if (!normalizedUserId || currentUserId === normalizedUserId) {
+      if (token) socket.auth = { token };
+      return socket;
+    }
+
+    socket.disconnect();
+    socket = null;
   }
+
+  socket = io(SOCKET_URL, {
+    auth: { token },
+    query: { userId: normalizedUserId },
+    transports: ['websocket', 'polling'],
+  });
+
   return socket;
 };
 

@@ -119,11 +119,11 @@ const Home = () => {
           variants={containerVariants}
         >
           {/* Header Section */}
-          <motion.div variants={itemVariants} className="mb-6 vibio-panel p-6 sm:p-7 bg-gradient-to-r from-white to-blue-50/70">
-            <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
+          <motion.div variants={itemVariants} className="mb-6 px-1 py-1 sm:px-2">
+            <h1 className="text-3xl font-semibold text-slate-900 tracking-tight">
               Welcome back, {user?.name?.split(' ')[0]}
             </h1>
-            <p className="text-slate-600 mt-2">
+            <p className="text-slate-600 mt-2 max-w-2xl">
               Your people are sharing ideas, photos, stories, and moments. Jump in and create something meaningful.
             </p>
           </motion.div>

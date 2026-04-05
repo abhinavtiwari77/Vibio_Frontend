@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MainLayout from '../components/layout/MainLayout';
 import { notificationService, userService } from '../services';
 import { formatDistanceToNow, isToday, isYesterday, isThisWeek, isThisMonth } from 'date-fns';
 import { Bell, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useSocket } from '../hooks/useSocket';
 
 const Notifications = () => {
     const navigate = useNavigate();
@@ -12,11 +13,7 @@ const Notifications = () => {
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
         try {
             setLoading(true);
             const [notifData, reqData] = await Promise.all([
@@ -32,7 +29,18 @@ const Notifications = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
+
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
+
+    const handleRealtimeNotification = useCallback(() => {
+        fetchData();
+    }, [fetchData]);
+
+    useSocket('newNotification', handleRealtimeNotification);
+    useSocket('followRequestUpdated', handleRealtimeNotification);
 
     const handleFollowAction = async (userId, action) => {
         try {
