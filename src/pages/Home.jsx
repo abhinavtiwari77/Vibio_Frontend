@@ -112,34 +112,36 @@ const Home = () => {
 
   return (
     <MainLayout>
-      <div className="max-w-3xl mx-auto py-8 px-4 sm:px-6">
+      <div className="mx-auto max-w-3xl px-1 py-2 sm:px-3">
         <motion.div
           initial="hidden"
           animate="visible"
           variants={containerVariants}
         >
           {/* Header Section */}
-          <motion.div variants={itemVariants} className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
-              Welcome back, <span className="text-indigo-600">{user?.name?.split(' ')[0]}</span>
+          <motion.div variants={itemVariants} className="mb-6 vibio-panel p-6 sm:p-7 bg-gradient-to-r from-white to-blue-50/70">
+            <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
+              Welcome back, {user?.name?.split(' ')[0]}
             </h1>
-            <p className="text-gray-500 mt-1">Here's what's happening in your community today.</p>
+            <p className="text-slate-600 mt-2">
+              Your people are sharing ideas, photos, stories, and moments. Jump in and create something meaningful.
+            </p>
           </motion.div>
 
           {/* Create Post */}
           {showCreatePost && (
-            <motion.div variants={itemVariants} className="mb-8">
+            <motion.div variants={itemVariants} className="mb-6">
               <CreatePost onPostCreated={handlePostCreated} />
             </motion.div>
           )}
 
           {/* Feed Header */}
-          <motion.div variants={itemVariants} className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-gray-900">Your Feed</h2>
+          <motion.div variants={itemVariants} className="flex items-center justify-between mb-5 px-1">
+            <h2 className="text-xl font-bold text-slate-900">Latest From Your Network</h2>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setShowCreatePost(!showCreatePost)}
-                className="text-sm font-medium text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 px-3 py-1.5 rounded-lg transition-colors"
+                className="vibio-btn-ghost"
               >
                 {showCreatePost ? 'Hide Create Post' : 'Create Post'}
               </button>
@@ -150,16 +152,16 @@ const Home = () => {
           <motion.div variants={itemVariants} className="space-y-6">
             {loading ? (
               <div className="flex items-center justify-center py-12">
-                <Loader className="w-8 h-8 animate-spin text-indigo-600" />
+                <Loader className="w-8 h-8 animate-spin text-blue-600" />
               </div>
             ) : posts.length === 0 ? (
-              <div className="text-center py-16 bg-white rounded-2xl border border-dashed border-gray-200 shadow-sm">
-                <div className="w-16 h-16 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Heart className="w-8 h-8 text-indigo-500" />
+              <div className="text-center py-16 vibio-panel border-dashed bg-gradient-to-r from-white to-cyan-50/60">
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Heart className="w-8 h-8 text-blue-600" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-1">No posts yet</h3>
-                <p className="text-gray-500 max-w-sm mx-auto">
-                  Your feed is waiting for you. Share your journey or follow others to see their updates.
+                <h3 className="text-lg font-semibold text-slate-900 mb-1">No posts yet</h3>
+                <p className="text-slate-600 max-w-sm mx-auto">
+                  Your feed is ready. Share your first post or connect with more people to start the stream.
                 </p>
               </div>
             ) : (
@@ -186,7 +188,7 @@ const Home = () => {
             )}
             {loading && posts.length > 0 && (
               <div className="flex items-center justify-center py-4">
-                <Loader className="w-6 h-6 animate-spin text-indigo-600" />
+                <Loader className="w-6 h-6 animate-spin text-blue-600" />
               </div>
             )}
           </motion.div>

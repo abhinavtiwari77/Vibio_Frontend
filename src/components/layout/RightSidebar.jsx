@@ -1,30 +1,48 @@
-import { Heart, TrendingUp, Users, MessageCircle } from 'lucide-react';
+import { Compass, Sparkles, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const RightSidebar = () => {
-  return (
-    <aside className="hidden xl:block w-80 bg-white border-l border-gray-200 h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto">
-      <div className="p-4 space-y-6">
-        {/* Wellness Tip */}
-        <div className="card bg-indigo-50 border-indigo-100">
-          <div className="flex items-center gap-2 mb-3">
-            <Heart className="w-5 h-5 text-indigo-600" fill="currentColor" />
-            <h3 className="font-semibold text-indigo-900">Daily Wellness Tip</h3>
-          </div>
-          <p className="text-sm text-indigo-800 leading-relaxed font-medium">
-            Take a 5-minute break every hour to stretch and breathe deeply. Your mind and body will thank you.
-          </p>
-        </div>
+  const navigate = useNavigate();
+  const quickTopics = ['Design', 'Music', 'Photography', 'Startups', 'Fitness'];
 
-        {/* Community Guidelines */}
-        <div className="px-4 py-3 bg-gray-50 rounded-lg border border-gray-100">
-          <p className="text-xs text-gray-500 leading-relaxed font-medium">
-            <a href="/terms" className="hover:text-indigo-600 transition-colors">Terms</a>
-            {' • '}
-            <a href="/privacy" className="hover:text-indigo-600 transition-colors">Privacy</a>
-            {' • '}
-            <a href="/guidelines" className="hover:text-indigo-600 transition-colors">Guidelines</a>
+  return (
+    <aside className="hidden xl:block xl:sticky xl:top-[5.6rem] xl:h-[calc(100vh-6.5rem)] overflow-y-auto">
+      <div className="space-y-5">
+        <button
+          type="button"
+          onClick={() => navigate('/create-post')}
+          className="w-full text-left bg-transparent rounded-[1.4rem] p-5"
+        >
+          <div className="flex items-center gap-2 mb-3">
+            <Sparkles className="w-4 h-4 text-blue-600" />
+            <h3 className="font-semibold text-slate-900">Creative Prompt</h3>
+          </div>
+          <p className="text-sm text-slate-700 leading-relaxed">
+            Share one visual or story today that captures your current mood in exactly three words.
           </p>
-          <p className="text-xs text-gray-400 mt-2">© 2025 HealWell</p>
+          <div className="mt-4 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-4 py-2 text-xs font-semibold text-white shadow-sm shadow-blue-500/25">
+            Start a Post
+            <ArrowRight className="w-3.5 h-3.5" />
+          </div>
+        </button>
+
+        <div className="bg-transparent rounded-[1.4rem] p-5">
+          <div className="flex items-center gap-2 mb-3">
+            <Compass className="w-4 h-4 text-cyan-600" />
+            <h3 className="font-semibold text-slate-900">Trending Circles</h3>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {quickTopics.map((topic) => (
+              <button
+                type="button"
+                key={topic}
+                onClick={() => navigate('/communities')}
+                className="rounded-xl bg-white px-3 py-1 text-xs font-semibold text-blue-700"
+              >
+                #{topic}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </aside>

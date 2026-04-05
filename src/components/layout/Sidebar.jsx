@@ -1,9 +1,7 @@
-import { NavLink, useNavigate } from 'react-router-dom';
-import { Home, Users, MessageCircle, TrendingUp, Heart, Settings, Music4, BookOpen } from 'lucide-react';
+import { NavLink } from 'react-router-dom';
+import { Home, Users, MessageCircle, Heart, Settings, Music4, BookOpen } from 'lucide-react';
 
 const Sidebar = () => {
-  const navigate = useNavigate();
-
   const navItems = [
     { name: 'Feed', path: '/', icon: Home },
     { name: 'Communities', path: '/communities', icon: Users },
@@ -14,43 +12,42 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="hidden lg:block w-64 bg-white border-r border-gray-200 h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto">
-      <div className="p-4">
-        {/* Navigation Links */}
-        <nav className="space-y-1 mb-8">
+    <aside className="hidden lg:block lg:sticky lg:top-[5.6rem] lg:h-[calc(100vh-6.5rem)] overflow-y-auto">
+      <div className="bg-transparent p-0 overflow-hidden">
+        <div className="p-3 pt-4">
+          <nav className="space-y-1.5 mb-6">
           {navItems.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${isActive
-                  ? 'bg-indigo-50 text-indigo-600 shadow-sm font-medium'
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                `group flex items-center gap-3 px-4 py-3 rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300 ${isActive
+                  ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-lg shadow-blue-500/25 font-medium'
+                  : 'text-slate-600 hover:bg-blue-50 hover:text-slate-900'
                 }`
               }
             >
-              <item.icon className="w-5 h-5" />
-              <span className="font-medium">{item.name}</span>
+              <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-white/20">
+                <item.icon className="w-[18px] h-[18px]" />
+              </span>
+              <span className="font-medium leading-none">{item.name}</span>
             </NavLink>
           ))}
-        </nav>
+          </nav>
 
-        {/* Quick Actions */}
-        <div className="border-t border-gray-100 pt-4 mt-6">
-          <NavLink
-            to="/settings"
-            className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
-          >
-            <Settings className="w-5 h-5" />
-            <span className="font-medium">Settings</span>
-          </NavLink>
-        </div>
+          <div className="bg-transparent p-3">
+            <NavLink
+              to="/settings"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-white/80 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300"
+            >
+              <Settings className="w-[18px] h-[18px]" />
+              <span className="font-medium text-sm">Settings</span>
+            </NavLink>
+          </div>
 
-        {/* Footer */}
-        <div className="mt-8 pt-4 border-t border-gray-100">
-          <p className="text-xs text-gray-400 px-2 font-medium">
-            © 2025 HealWell
-          </p>
+          <div className="mt-5 pt-4 px-2">
+            <p className="text-xs text-slate-500 font-medium">© 2026 Vibio</p>
+          </div>
         </div>
       </div>
     </aside>

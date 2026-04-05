@@ -1,43 +1,206 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
 @import "tailwindcss";
 
+:root {
+  --bg-main: #f5f6fa;
+  --bg-soft: #ffffff;
+  --bg-muted: #edf0f8;
+  --text-main: #171a2f;
+  --text-soft: #596082;
+  --border-main: #d7dcef;
+  --brand-main: #2b59ff;
+  --brand-dark: #1c2f77;
+}
+
 @layer base {
+  * {
+    @apply box-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply font-sans antialiased bg-slate-50 text-slate-900;
+    font-family: 'Sora', sans-serif;
+    color: var(--text-main);
+    background:
+      radial-gradient(circle at 8% 8%, #ffffff 0%, #eef2ff 33%, transparent 64%),
+      radial-gradient(circle at 90% 12%, #e7fbff 0%, transparent 42%),
+      linear-gradient(180deg, #f7f9ff 0%, #f0f3fb 100%);
+    @apply antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  button,
+  input,
+  textarea {
+    font-family: 'Sora', sans-serif;
   }
 }
 
 @layer components {
+  .vibio-shell {
+    @apply mx-auto w-full max-w-[1520px] px-4 sm:px-6 xl:px-8;
+  }
+
+  .vibio-glass {
+    background: rgba(255, 255, 255, 0.86);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(43, 89, 255, 0.14);
+  }
+
+  .vibio-panel {
+    @apply rounded-3xl border shadow-sm transition-all duration-300;
+    background: var(--bg-soft);
+    border-color: rgba(43, 89, 255, 0.12);
+    box-shadow: 0 12px 30px rgba(43, 89, 255, 0.08);
+  }
+
+  .vibio-panel:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 36px rgba(43, 89, 255, 0.12);
+  }
+
+  .vibio-card-interactive {
+    @apply transition-all duration-200;
+  }
+
+  .vibio-card-interactive:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 34px rgba(43, 89, 255, 0.14);
+  }
+
+  .vibio-card-interactive:active {
+    transform: translateY(-1px) scale(0.99);
+  }
+
+  .vibio-muted-panel {
+    @apply rounded-2xl border;
+    background: linear-gradient(140deg, #f6f9ff 0%, #eef3fb 100%);
+    border-color: rgba(43, 89, 255, 0.12);
+  }
+
+  .vibio-input {
+    @apply w-full rounded-2xl border px-4 py-3 outline-none transition-all duration-200;
+    background: #ffffff;
+    border-color: rgba(54, 76, 148, 0.2);
+  }
+
+  .vibio-input:focus {
+    border-color: var(--brand-main);
+    box-shadow: 0 0 0 3px rgba(43, 89, 255, 0.14);
+  }
+
+  .vibio-btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200;
+    background: linear-gradient(110deg, #2b59ff 0%, #437dff 55%, #22a8cf 100%);
+  }
+
+  .vibio-btn-primary:hover {
+    filter: brightness(1.05);
+    box-shadow: 0 10px 18px rgba(43, 89, 255, 0.24);
+  }
+
+  .vibio-btn-primary:active {
+    transform: translateY(1px) scale(0.98);
+  }
+
+  .vibio-btn-primary:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(34, 168, 207, 0.28), 0 10px 18px rgba(43, 89, 255, 0.24);
+  }
+
+  .vibio-btn-primary:disabled {
+    @apply cursor-not-allowed opacity-60;
+  }
+
+  .vibio-btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-2xl border px-4 py-2 text-sm font-medium transition-all;
+    border-color: rgba(43, 89, 255, 0.16);
+    background: rgba(255, 255, 255, 0.75);
+    color: var(--text-main);
+  }
+
+  .vibio-btn-ghost:hover {
+    background: #ffffff;
+    border-color: rgba(43, 89, 255, 0.34);
+  }
+
+  .vibio-btn-ghost:active {
+    transform: translateY(1px) scale(0.98);
+  }
+
+  .vibio-btn-ghost:focus-visible {
+    outline: none;
+    border-color: rgba(43, 89, 255, 0.44);
+    box-shadow: 0 0 0 3px rgba(43, 89, 255, 0.14);
+  }
+
+  .vibio-nav-chip {
+    @apply rounded-full px-3 py-1.5 text-xs font-semibold transition-all duration-200;
+    color: #4a567d;
+    background: rgba(255, 255, 255, 0.62);
+    border: 1px solid rgba(43, 89, 255, 0.12);
+  }
+
+  .vibio-nav-chip:hover {
+    color: #1f2a53;
+    background: #ffffff;
+    border-color: rgba(43, 89, 255, 0.24);
+  }
+
+  .vibio-nav-chip-active {
+    color: #ffffff;
+    background: linear-gradient(110deg, #2b59ff 0%, #437dff 55%, #22a8cf 100%);
+    border-color: transparent;
+    box-shadow: 0 8px 16px rgba(43, 89, 255, 0.24);
+  }
+
   .btn-primary {
-    @apply bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2.5 rounded-lg transition-all duration-200 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-md;
+    @apply vibio-btn-primary;
   }
 
   .btn-secondary {
-    @apply bg-white hover:bg-gray-50 text-gray-700 font-medium px-4 py-2.5 rounded-lg border border-gray-200 transition-colors duration-200;
+    @apply vibio-btn-ghost;
   }
 
   .btn-outline {
-    @apply border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50 font-medium px-4 py-2.5 rounded-lg transition-colors duration-200;
+    @apply vibio-btn-ghost;
   }
 
   .input-field {
-    @apply w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all duration-200 bg-white;
+    @apply vibio-input;
   }
 
   .card {
-    @apply bg-white rounded-xl shadow-sm border border-gray-100 p-4 transition-shadow duration-200;
+    @apply vibio-panel p-5;
   }
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-slate-50;
+  @apply bg-transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-300 rounded-full hover:bg-slate-400 transition-colors;
+  @apply rounded-full transition-colors;
+  background: rgba(45, 75, 170, 0.3);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(45, 75, 170, 0.5);
 }

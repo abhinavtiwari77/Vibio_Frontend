@@ -1,0 +1,19 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="vibioGrad" x1="14" y1="14" x2="114" y2="114" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#06B6D4"/>
+    </linearGradient>
+    <filter id="shadow" x="0" y="0" width="128" height="128" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="10" stdDeviation="8" flood-color="#2563EB" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#shadow)">
+    <rect x="14" y="14" width="100" height="100" rx="24" fill="url(#vibioGrad)"/>
+  </g>
+
+  <circle cx="64" cy="64" r="20" stroke="white" stroke-width="4"/>
+  <circle cx="56" cy="64" r="7" stroke="white" stroke-width="4"/>
+  <circle cx="72" cy="64" r="7" stroke="white" stroke-width="4"/>
+</svg>

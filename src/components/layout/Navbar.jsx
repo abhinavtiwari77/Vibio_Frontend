@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { communityService, userService, notificationService } from '../../services';
-import { formatDistanceToNow } from 'date-fns';
-import toast from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Bell,
@@ -15,17 +13,17 @@ import {
   User,
   Heart,
   Plus,
-  ChevronDown,
   Home,
   Users,
   MessageCircle,
   Music4,
-  BookOpen
+  BookOpen,
+  Disc3
 } from 'lucide-react';
 import { useClickOutside } from '../../hooks';
 
 const Navbar = () => {
-  const { user, logout, checkAuth } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
@@ -35,7 +33,6 @@ const Navbar = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [requests, setRequests] = useState([]);
   const [communityRequests, setCommunityRequests] = useState([]);
-  const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
 
   const navItems = [
@@ -94,51 +91,9 @@ const Navbar = () => {
       ]);
       setRequests(userData.requests);
       setCommunityRequests(comData.communities);
-      setNotifications(notifData.notifications || []);
       setUnreadCount(notifData.unreadCount || 0);
     } catch (error) {
       console.error(error);
-    }
-  };
-
-
-
-  const handleCommunityAction = async (communityId, userId, action) => {
-    try {
-      if (action === 'approve') {
-        await communityService.approveRequest(communityId, userId);
-        toast.success('Member approved');
-      } else {
-        await communityService.rejectRequest(communityId, userId);
-        toast.success('Request rejected');
-      }
-      fetchRequests();
-    } catch (error) {
-      console.error(error);
-      toast.error('Action failed');
-    }
-  };
-
-  const handleAcceptRequest = async (id) => {
-    try {
-      await userService.acceptFollowRequest(id);
-      toast.success('Request accepted');
-      setRequests(requests.filter(req => req._id !== id));
-      if (checkAuth) checkAuth();
-    } catch (error) {
-      console.error(error);
-      toast.error('Failed to accept request');
-    }
-  };
-
-  const handleRejectRequest = async (id) => {
-    try {
-      await userService.rejectFollowRequest(id);
-      toast.success('Request rejected');
-      setRequests(requests.filter(req => req._id !== id));
-    } catch (error) {
-      console.error(error);
-      toast.error('Failed to reject request');
     }
   };
 
@@ -155,82 +110,78 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white/80 backdrop-blur-md border-b border-gray-200/50 sticky top-0 z-50 shadow-sm transition-all duration-300">
-      <div className="w-full px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 gap-4">
+    <nav className="sticky top-0 z-50 border-b border-blue-200/60 bg-white/85 backdrop-blur-lg">
+      <div className="vibio-shell px-6 sm:px-8 xl:px-10 h-[5.5rem] flex items-center justify-between gap-6">
 
           {/* Left Side: Logo */}
           <div className="shrink-0">
-            <NavLink to="/" className="flex items-center gap-2.5 group">
-              <div className="relative">
-                <div className="absolute inset-0 bg-teal-100 rounded-xl rotate-3 group-hover:rotate-6 transition-transform duration-300"></div>
-                <div className="relative w-10 h-10 bg-linear-to-br from-teal-500 to-cyan-500 rounded-xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-all duration-300">
-                  <Heart className="w-5 h-5 text-white" fill="currentColor" strokeWidth={2.5} />
-                </div>
+            <NavLink to="/" className="flex items-center gap-3 group">
+              <div className="inline-flex items-center justify-center w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-500 text-white shadow-xl shadow-blue-500/30">
+                <Disc3 className="w-5.5 h-5.5" />
               </div>
-              <div className="flex flex-col">
-                <span className="text-xl font-bold text-slate-900 tracking-tight leading-none group-hover:text-teal-600 transition-colors">
-                  HealWell
+              <div className="leading-tight">
+                <span className="text-[1.35rem] font-bold tracking-[-0.03em] text-slate-900 group-hover:text-blue-700 transition-colors">
+                  Vibio
                 </span>
-                <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider leading-none">
-                  We care
-                </span>
+                <p className="text-[10px] uppercase tracking-[0.22em] text-slate-500 font-semibold mt-0.5">
+                  Social Canvas
+                </p>
               </div>
             </NavLink>
           </div>
 
           {/* Center: Search Bar */}
-          <div className="hidden md:flex flex-1 justify-center max-w-lg px-8">
+          <div className="hidden md:flex flex-1 justify-center max-w-2xl xl:max-w-3xl px-4 lg:px-10">
             <form onSubmit={handleSearch} className="w-full">
               <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search HealWell..."
-                  className="w-full pl-11 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent text-sm transition-all"
+                  placeholder="Search Vibio creators, communities, and moments"
+                  className="vibio-input h-12 rounded-full pl-11 pr-5 text-sm bg-white border-blue-200/80 shadow-sm transition-all duration-200 hover:shadow-md focus:border-blue-400 focus:shadow-[0_0_0_3px_rgba(43,89,255,0.14),0_10px_18px_rgba(43,89,255,0.16)]"
                 />
 
-                {/* Search Results Dropdown */}
                 <AnimatePresence>
                   {searchQuery && (searchResults.length > 0 || isSearching) && (
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 10 }}
-                      className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden z-50 py-2"
+                      transition={{ duration: 0.18 }}
+                      className="absolute top-full left-0 right-0 mt-2 vibio-panel overflow-hidden z-50 py-2"
                     >
                       {isSearching ? (
-                        <div className="px-4 py-3 text-sm text-gray-500 text-center">Searching...</div>
+                        <div className="px-4 py-3 text-sm text-slate-500 text-center">Searching...</div>
                       ) : searchResults.length > 0 ? (
-                        searchResults.map((user) => (
+                        searchResults.map((searchedUser) => (
                           <div
-                            key={user._id}
+                            key={searchedUser._id}
                             onClick={() => {
-                              navigate(`/profile/${user._id}`);
+                              navigate(`/profile/${searchedUser._id}`);
                               setSearchQuery('');
                               setSearchResults([]);
                             }}
-                            className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors"
+                            className="flex items-center gap-3 px-4 py-3 hover:bg-blue-50 cursor-pointer transition-colors"
                           >
-                            <div className="w-8 h-8 rounded-full bg-gray-200 overflow-hidden shrink-0">
-                              {user.profilePicUrl ? (
-                                <img src={user.profilePicUrl} alt={user.name} className="w-full h-full object-cover" />
+                            <div className="w-8 h-8 rounded-full bg-blue-100 overflow-hidden shrink-0">
+                              {searchedUser.profilePicUrl ? (
+                                <img src={searchedUser.profilePicUrl} alt={searchedUser.name} className="w-full h-full object-cover" />
                               ) : (
-                                <div className="w-full h-full flex items-center justify-center bg-teal-500 text-white font-semibold text-xs">
-                                  {user.name?.charAt(0)}
+                                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-600 to-cyan-500 text-white font-semibold text-xs">
+                                  {searchedUser.name?.charAt(0)}
                                 </div>
                               )}
                             </div>
                             <div className="flex flex-col overflow-hidden">
-                              <span className="text-sm font-medium text-gray-900 truncate">{user.name}</span>
-                              <span className="text-xs text-gray-500 truncate">@{user.username || 'user'}</span>
+                              <span className="text-sm font-semibold text-slate-900 truncate">{searchedUser.name}</span>
+                              <span className="text-xs text-slate-500 truncate">@{searchedUser.username || 'user'}</span>
                             </div>
                           </div>
                         ))
                       ) : (
-                        <div className="px-4 py-3 text-sm text-gray-500 text-center">No users found</div>
+                        <div className="px-4 py-3 text-sm text-slate-500 text-center">No users found</div>
                       )}
                     </motion.div>
                   )}
@@ -240,50 +191,43 @@ const Navbar = () => {
           </div>
 
           {/* Right Side: Actions */}
-          <div className="flex items-center gap-2 sm:gap-3">
-
-            {/* Create Button */}
+          <div className="flex items-center gap-3 sm:gap-3.5">
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => navigate('/create-post')}
-              className="hidden sm:flex items-center gap-2 bg-linear-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 text-white px-4 py-2 rounded-full text-sm font-medium transition-all shadow-sm"
+              className="hidden sm:flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-blue-500/25 hover:brightness-105 transition-all active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300"
             >
               <Plus className="w-4 h-4" />
-              <span className="hidden xl:inline">Create</span>
+              <span>New Post</span>
             </motion.button>
 
-            {/* Notifications */}
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate('/notifications')}
-              className="relative p-2.5 rounded-full transition-all duration-200 text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+              className="relative p-2.5 rounded-full transition-all duration-200 text-slate-600 hover:bg-blue-100 hover:text-blue-700"
             >
               <Bell className="w-5 h-5" />
               {(requests.length > 0 || (communityRequests && communityRequests.length > 0) || unreadCount > 0) && (
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-cyan-500 rounded-full border-2 border-white" />
               )}
             </motion.button>
 
-
-
-            {/* Mobile Menu Button - Moved before Profile */}
             <motion.button
               whileTap={{ scale: 0.9 }}
               onClick={() => setShowMobileMenu(!showMobileMenu)}
-              className="md:hidden p-2 text-gray-500 hover:bg-gray-100 rounded-full transition-colors"
+              className="md:hidden p-2 text-slate-600 hover:bg-blue-100 rounded-full transition-colors"
             >
               {showMobileMenu ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </motion.button>
 
-            {/* Profile Menu */}
             <div className="relative" ref={profileMenuRef}>
               <motion.button
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setShowProfileMenu(!showProfileMenu)}
-                className="p-0.5 rounded-full hover:ring-2 hover:ring-gray-200 transition-all"
+                className="p-0.5 rounded-full hover:ring-2 hover:ring-blue-200 transition-all"
               >
-                <div className="w-9 h-9 bg-linear-to-br from-teal-400 to-cyan-500 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-sm">
+                <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-sm">
                   {user?.profilePicUrl ? (
                     <img src={user.profilePicUrl} alt={user.name} className="w-full h-full rounded-full object-cover" />
                   ) : (
@@ -291,19 +235,18 @@ const Navbar = () => {
                   )}
                 </div>
               </motion.button>
-
               <AnimatePresence>
                 {showProfileMenu && (
                   <motion.div
                     initial={{ opacity: 0, y: 10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-200 py-1 z-50 origin-top-right"
+                    transition={{ duration: 0.16, ease: 'easeOut' }}
+                    className="absolute right-0 mt-2 w-60 vibio-panel py-1 z-50 origin-top-right"
                   >
-                    <div className="px-4 py-3 border-b border-gray-100">
-                      <p className="font-semibold text-sm text-gray-900 truncate">{user?.name}</p>
-                      <p className="text-xs text-gray-500 truncate mt-0.5">{user?.email}</p>
+                    <div className="px-4 py-3 border-b border-blue-100">
+                      <p className="font-semibold text-sm text-slate-900 truncate">{user?.name}</p>
+                      <p className="text-xs text-slate-500 truncate mt-0.5">{user?.email}</p>
                     </div>
                     <div className="py-1">
                       <button
@@ -311,26 +254,26 @@ const Navbar = () => {
                           navigate('/profile');
                           setShowProfileMenu(false);
                         }}
-                        className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-blue-50 transition-colors"
                       >
                         <User className="w-4 h-4" />
                         <span>Your Profile</span>
                       </button>
-                      {/* <button
+                      <button
                         onClick={() => {
                           navigate('/settings');
                           setShowProfileMenu(false);
                         }}
-                        className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-blue-50 transition-colors"
                       >
                         <Settings className="w-4 h-4" />
                         <span>Settings</span>
-                      </button> */}
+                      </button>
                     </div>
-                    <div className="border-t border-gray-100 py-1">
+                    <div className="border-t border-blue-100 py-1">
                       <button
                         onClick={handleLogout}
-                        className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-900 hover:bg-blue-50 transition-colors"
                       >
                         <LogOut className="w-4 h-4" />
                         <span>Sign out</span>
@@ -340,11 +283,9 @@ const Navbar = () => {
                 )}
               </AnimatePresence>
             </div>
-
-
           </div>
         </div>
-      </div>
+      
 
       {/* Mobile Menu */}
       <AnimatePresence>
@@ -354,19 +295,19 @@ const Navbar = () => {
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="md:hidden border-t border-gray-100 bg-white overflow-hidden shadow-lg"
+            className="md:hidden border-t border-blue-200/60 bg-white/95 overflow-hidden"
           >
-            <div className="px-4 py-4 space-y-3">
+            <div className="vibio-shell py-4 space-y-3">
               {/* Mobile Search */}
               <form onSubmit={handleSearch} className="mb-4">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search..."
-                    className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-100 rounded-xl focus:outline-none focus:ring-1 focus:ring-indigo-500 text-sm"
+                    className="vibio-input pl-10 pr-4 py-2.5 rounded-2xl text-sm"
                   />
 
                   {/* Mobile Search Results Dropdown */}
@@ -376,39 +317,39 @@ const Navbar = () => {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
-                        className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden z-50 py-2"
+                        className="absolute top-full left-0 right-0 mt-2 vibio-panel overflow-hidden z-50 py-2"
                       >
                         {isSearching ? (
-                          <div className="px-4 py-3 text-sm text-gray-500 text-center">Searching...</div>
+                          <div className="px-4 py-3 text-sm text-slate-500 text-center">Searching...</div>
                         ) : searchResults.length > 0 ? (
-                          searchResults.map((user) => (
+                          searchResults.map((searchedUser) => (
                             <div
-                              key={user._id}
+                              key={searchedUser._id}
                               onClick={() => {
-                                navigate(`/profile/${user._id}`);
+                                navigate(`/profile/${searchedUser._id}`);
                                 setSearchQuery('');
                                 setSearchResults([]);
                                 setShowMobileMenu(false);
                               }}
-                              className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors"
+                              className="flex items-center gap-3 px-4 py-3 hover:bg-blue-50 cursor-pointer transition-colors"
                             >
-                              <div className="w-8 h-8 rounded-full bg-gray-200 overflow-hidden shrink-0">
-                                {user.profilePicUrl ? (
-                                  <img src={user.profilePicUrl} alt={user.name} className="w-full h-full object-cover" />
+                              <div className="w-8 h-8 rounded-full bg-blue-100 overflow-hidden shrink-0">
+                                {searchedUser.profilePicUrl ? (
+                                  <img src={searchedUser.profilePicUrl} alt={searchedUser.name} className="w-full h-full object-cover" />
                                 ) : (
-                                  <div className="w-full h-full flex items-center justify-center bg-teal-500 text-white font-semibold text-xs">
-                                    {user.name?.charAt(0)}
+                                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-600 to-cyan-500 text-white font-semibold text-xs">
+                                    {searchedUser.name?.charAt(0)}
                                   </div>
                                 )}
                               </div>
                               <div className="flex flex-col overflow-hidden">
-                                <span className="text-sm font-medium text-gray-900 truncate">{user.name}</span>
-                                <span className="text-xs text-gray-500 truncate">@{user.username || 'user'}</span>
+                                <span className="text-sm font-semibold text-slate-900 truncate">{searchedUser.name}</span>
+                                <span className="text-xs text-slate-500 truncate">@{searchedUser.username || 'user'}</span>
                               </div>
                             </div>
                           ))
                         ) : (
-                          <div className="px-4 py-3 text-sm text-gray-500 text-center">No users found</div>
+                          <div className="px-4 py-3 text-sm text-slate-500 text-center">No users found</div>
                         )}
                       </motion.div>
                     )}
@@ -416,22 +357,28 @@ const Navbar = () => {
                 </div>
               </form>
 
-              <div className="pt-3 border-t border-gray-50 flex flex-col gap-1">
+              <div className="pt-3 border-t border-blue-100 flex flex-col gap-1">
                 {navItems.map((item) => (
-                  <NavLink
+                  <motion.div
                     key={item.path}
-                    to={item.path}
-                    onClick={() => setShowMobileMenu(false)}
-                    className={({ isActive }) =>
-                      `flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 ${isActive
-                        ? 'bg-indigo-50 text-indigo-600 font-medium'
-                        : 'text-gray-600 hover:bg-gray-50'
-                      }`
-                    }
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.2 }}
                   >
-                    <item.icon className="w-5 h-5" />
-                    <span className="font-medium text-sm">{item.name}</span>
-                  </NavLink>
+                    <NavLink
+                      to={item.path}
+                      onClick={() => setShowMobileMenu(false)}
+                      className={({ isActive }) =>
+                        `flex items-center gap-3 px-3 py-2.5 rounded-2xl transition-all duration-200 ${isActive
+                          ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-medium'
+                          : 'text-slate-700 hover:bg-blue-50'
+                        }`
+                      }
+                    >
+                      <item.icon className="w-5 h-5" />
+                      <span className="font-medium text-sm">{item.name}</span>
+                    </NavLink>
+                  </motion.div>
                 ))}
 
                 <button
@@ -439,7 +386,7 @@ const Navbar = () => {
                     navigate('/create-post');
                     setShowMobileMenu(false);
                   }}
-                  className="w-full flex items-center justify-center gap-2 bg-indigo-600 text-white px-4 py-3 rounded-xl hover:bg-indigo-700 transition-colors font-medium text-sm shadow-sm"
+                  className="w-full vibio-btn-primary mt-2"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Create New Post</span>

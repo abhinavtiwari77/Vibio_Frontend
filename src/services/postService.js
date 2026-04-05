@@ -19,9 +19,10 @@ export const postService = {
   },
 
   // Create post with media
-  createPost: async (content, mediaFiles = []) => {
+  createPost: async (content, mediaFiles = [], mediaEdits = []) => {
     const formData = new FormData();
     formData.append('content', content);
+    formData.append('mediaEdits', JSON.stringify(mediaEdits || []));
 
     // Append all media files
     if (mediaFiles && mediaFiles.length > 0) {
@@ -37,9 +38,10 @@ export const postService = {
   },
 
   // Update post with media
-  updatePost: async (postId, content, mediaFiles = []) => {
+  updatePost: async (postId, content, mediaFiles = [], mediaEdits = []) => {
     const formData = new FormData();
     formData.append('content', content);
+    formData.append('mediaEdits', JSON.stringify(mediaEdits || []));
 
     // Append all media files
     if (mediaFiles && mediaFiles.length > 0) {

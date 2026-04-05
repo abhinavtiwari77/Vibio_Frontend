@@ -104,9 +104,9 @@ const ChatWindow = ({ conversation, messages, onSendMessage, loading, onlineUser
 
     if (!conversation) {
         return (
-            <div className="flex-1 flex items-center justify-center bg-gray-50 h-full">
-                <div className="text-center text-gray-500">
-                    <p className="text-lg font-medium">Select a conversation</p>
+            <div className="flex-1 flex items-center justify-center bg-transparent h-full">
+                <div className="text-center text-slate-500">
+                    <p className="text-[2rem] font-semibold tracking-[-0.02em] text-slate-700">Select a conversation</p>
                     <p className="text-sm">or start a new chat from the suggestions</p>
                 </div>
             </div>
@@ -114,9 +114,9 @@ const ChatWindow = ({ conversation, messages, onSendMessage, loading, onlineUser
     }
 
     return (
-        <div className="flex-1 flex flex-col h-full bg-white relative">
+        <div className="flex-1 flex flex-col h-full bg-white/80 backdrop-blur-sm relative">
             {/* Header */}
-            <div className="px-6 py-3 border-b border-gray-100 flex items-center justify-between flex-shrink-0 bg-white z-10">
+            <div className="px-6 py-3 border-b border-blue-100 flex items-center justify-between flex-shrink-0 bg-white/95 backdrop-blur-sm z-10">
                 <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-semibold text-lg">
                         {otherParticipant?.name?.charAt(0).toUpperCase()}
@@ -133,16 +133,16 @@ const ChatWindow = ({ conversation, messages, onSendMessage, loading, onlineUser
                         )}
                     </div>
                 </div>
-                <div className="flex items-center gap-4 text-gray-400 relative">
+                <div className="flex items-center gap-4 text-slate-400 relative">
                     <button
                         onClick={() => setShowMenu(!showMenu)}
-                        className="hover:text-indigo-600 transition-colors p-1 rounded-full hover:bg-gray-100"
+                        className="hover:text-blue-600 transition-colors p-1 rounded-full hover:bg-blue-50"
                     >
                         <MoreVertical className="w-5 h-5" />
                     </button>
 
                     {showMenu && (
-                        <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-50">
+                        <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg border border-blue-100 py-1 z-50">
                             <button
                                 onClick={() => {
                                     if (window.confirm('Are you sure you want to delete this conversation? It will be removed from your list.')) {
@@ -161,7 +161,7 @@ const ChatWindow = ({ conversation, messages, onSendMessage, loading, onlineUser
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-6 bg-gray-50/50 custom-scrollbar">
+            <div className="flex-1 overflow-y-auto p-6 bg-transparent custom-scrollbar">
                 {loading ? (
                     <div className="flex justify-center py-4">
                         <div className="w-6 h-6 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
@@ -182,7 +182,7 @@ const ChatWindow = ({ conversation, messages, onSendMessage, loading, onlineUser
 
                                         <div className={`p-3 rounded-2xl shadow-sm ${isMe
                                             ? 'bg-indigo-600 text-white rounded-br-none'
-                                            : 'bg-white text-gray-800 border border-gray-100 rounded-bl-none'
+                                            : 'bg-white text-gray-800 border border-blue-100 rounded-bl-none'
                                             }`}>
                                             {msg.mediaUrl && (
                                                 <div className="mb-2 rounded-lg overflow-hidden">
@@ -218,7 +218,7 @@ const ChatWindow = ({ conversation, messages, onSendMessage, loading, onlineUser
             </div>
 
             {/* Input */}
-            <div className="p-4 bg-white border-t border-gray-100">
+            <div className="p-4 bg-white/95 backdrop-blur-sm border-t border-blue-100">
                 <form onSubmit={handleSubmit} className="flex items-center gap-3">
                     <button
                         type="button"
@@ -241,7 +241,7 @@ const ChatWindow = ({ conversation, messages, onSendMessage, loading, onlineUser
                         value={newMessage}
                         onChange={handleInputChange}
                         placeholder="Type your message..."
-                        className="flex-1 bg-gray-50 border-0 rounded-full px-4 py-2.5 focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition-all outline-none text-sm"
+                        className="flex-1 bg-slate-50 border border-blue-100 rounded-full px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition-all outline-none text-sm"
                     />
                     <button
                         type="submit"

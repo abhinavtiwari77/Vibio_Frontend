@@ -189,11 +189,11 @@ const Messages = () => {
   };
 
   return (
-    <MainLayout showRightSidebar={false}>
-      <div className="flex h-[calc(100vh-4rem)] md:h-[calc(100vh-6rem)] max-w-7xl mx-auto bg-white shadow-xl overflow-hidden md:rounded-lg my-0 md:my-4 border border-gray-200">
+    <MainLayout showRightSidebar={false} wide>
+      <div className="flex h-[calc(100vh-7.5rem)] min-h-[620px] w-full bg-white/95 shadow-[0_14px_40px_rgba(15,23,42,0.08)] overflow-hidden rounded-2xl border border-blue-100">
 
         {/* Left Sidebar: Conversations & Search */}
-        <div className={`w-full md:w-80 lg:w-96 flex flex-col border-r border-gray-200 bg-white ${showMobileList ? 'flex' : 'hidden md:flex'
+        <div className={`w-full md:w-[350px] lg:w-[390px] xl:w-[420px] flex flex-col border-r border-blue-100 bg-white ${showMobileList ? 'flex' : 'hidden md:flex'
           }`}>
           <ConversationList
             conversations={conversations}
@@ -204,15 +204,15 @@ const Messages = () => {
         </div>
 
         {/* Center: Chat Window - Expanded */}
-        <div className={`flex-1 flex flex-col bg-slate-50 relative min-w-0 ${!showMobileList ? 'flex' : 'hidden md:flex'
+        <div className={`flex-1 flex flex-col bg-[linear-gradient(180deg,#f8fbff_0%,#f2f7ff_100%)] relative min-w-0 ${!showMobileList ? 'flex' : 'hidden md:flex'
           }`}>
           {!showMobileList && (
-            <div className="md:hidden bg-white border-b border-gray-100 p-2 flex items-center gap-2">
+            <div className="md:hidden bg-white border-b border-blue-100 p-2 flex items-center gap-2">
               <button onClick={() => {
                 setShowMobileList(true);
                 setActiveConversation(null);
-              }} className="p-2 hover:bg-gray-100 rounded-full">
-                <ArrowLeft className="w-5 h-5 text-gray-600" />
+              }} className="p-2 hover:bg-blue-50 rounded-full">
+                <ArrowLeft className="w-5 h-5 text-slate-600" />
               </button>
             </div>
           )}
