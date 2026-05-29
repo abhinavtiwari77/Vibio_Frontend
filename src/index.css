@@ -165,26 +165,6 @@
     border-color: transparent;
     box-shadow: 0 8px 16px rgba(43, 89, 255, 0.24);
   }
-
-  .btn-primary {
-    @apply vibio-btn-primary;
-  }
-
-  .btn-secondary {
-    @apply vibio-btn-ghost;
-  }
-
-  .btn-outline {
-    @apply vibio-btn-ghost;
-  }
-
-  .input-field {
-    @apply vibio-input;
-  }
-
-  .card {
-    @apply vibio-panel p-5;
-  }
 }
 
 /* Custom scrollbar */
